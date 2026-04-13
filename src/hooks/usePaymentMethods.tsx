@@ -32,13 +32,13 @@ export function usePaymentMethods() {
 
   const addPaymentMethod = useMutation({
     mutationFn: async (method: Omit<PaymentMethod, 'id' | 'created_at' | 'user_id' | 'is_default'>) => {
+      const { is_default: _d, ...rest } = method as any;
       const { data, error } = await supabase
         .from('payment_methods')
         .insert({
-          ...method,
-          user_id: user?.id,
-          is_default: false
-        })
+          ...rest,
+          user_id: user?.id
+        } as any)
         .select()
         .single();
       
@@ -52,9 +52,10 @@ export function usePaymentMethods() {
 
   const updatePaymentMethod = useMutation({
     mutationFn: async ({ id, ...updates }: Partial<PaymentMethod> & { id: string }) => {
+      const { is_default: _d, ...rest } = updates as any;
       const { data, error } = await supabase
         .from('payment_methods')
-        .update(updates)
+        .update(rest as any)
         .eq('id', id)
         .select()
         .single();
