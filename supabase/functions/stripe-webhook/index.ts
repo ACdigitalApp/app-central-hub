@@ -9,6 +9,8 @@ const corsHeaders = {
 // Price ID mapping - only monthly plan
 const PRICE_TO_PLAN: Record<string, string> = {
   "price_1StOD7EiPZqCo6ZjE6oAiJBM": "monthly",
+  "price_1TKiOwEiPZqCo6ZjGEZhzom9": "yearly",
+  "price_1TKZuKEiPZqCo6ZjRaowFjnr": "yearly",
 };
 
 Deno.serve(async (req: Request) => {
