@@ -829,7 +829,7 @@ export default function Settings() {
                     ? "text-primary border-primary/30 hover:bg-primary/10" 
                     : "text-muted-foreground"
                   }
-                  noSound
+                  
                 >
                   {soundsEnabled ? (
                     <>
