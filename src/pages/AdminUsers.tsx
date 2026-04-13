@@ -488,7 +488,7 @@ export default function AdminUsers() {
   const deleteUser = async (userId: string) => {
     try {
       setDeleting(userId);
-      const { error } = await supabase.rpc('admin_delete_user', { _target_user_id: userId });
+      const { error } = await (supabase.rpc as any)('admin_delete_user', { _target_user_id: userId });
       if (error) { toast.error('Errore eliminazione utente'); return; }
       setUsers(prev => prev.filter(u => u.id !== userId));
       toast.success('Utente eliminato');

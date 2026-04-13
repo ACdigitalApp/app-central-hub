@@ -69,12 +69,13 @@ export function useTransactions() {
 
   const addTransaction = useMutation({
     mutationFn: async (transaction: Omit<Transaction, 'id' | 'created_at' | 'user_id' | 'categories'>) => {
+      const { categories: _c, payment_methods: _p, ...rest } = transaction as any;
       const { data, error } = await supabase
         .from('transactions')
         .insert({
-          ...transaction,
+          ...rest,
           user_id: user?.id
-        })
+        } as any)
         .select()
         .single();
       
@@ -88,9 +89,10 @@ export function useTransactions() {
 
   const updateTransaction = useMutation({
     mutationFn: async ({ id, ...updates }: Partial<Transaction> & { id: string }) => {
+      const { categories: _c, payment_methods: _p, ...rest } = updates as any;
       const { data, error } = await supabase
         .from('transactions')
-        .update(updates)
+        .update(rest as any)
         .eq('id', id)
         .select()
         .single();

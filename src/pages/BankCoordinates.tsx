@@ -59,11 +59,11 @@ export default function BankCoordinates() {
       setLoading(true);
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
-      const { data: rows } = await supabase
+      const { data: rows } = await (supabase as any)
         .from('admin_settings')
         .select('setting_key, setting_value')
         .eq('user_id', user.id)
-        .in('setting_key', BANK_KEYS.map(k => `bank_${k}`));
+        .in('setting_key', BANK_KEYS.map((k: string) => `bank_${k}`));
 
       if (rows && rows.length > 0) {
         const d: BankData = { ...DEFAULT_BANK };
@@ -94,7 +94,7 @@ export default function BankCoordinates() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Not authenticated');
       for (const key of BANK_KEYS) {
-        await supabase.from('admin_settings').upsert(
+        await (supabase as any).from('admin_settings').upsert(
           { user_id: user.id, setting_key: `bank_${key}`, setting_value: form[key], updated_at: new Date().toISOString() },
           { onConflict: 'user_id,setting_key' }
         );
