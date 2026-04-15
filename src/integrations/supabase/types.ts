@@ -14,6 +14,191 @@ export type Database = {
   }
   public: {
     Tables: {
+      admin_activity_logs: {
+        Row: {
+          action: string
+          admin_user_id: string | null
+          created_at: string | null
+          id: string
+          ip_address: string | null
+          new_values: Json | null
+          old_values: Json | null
+          target_id: string | null
+          target_type: string | null
+        }
+        Insert: {
+          action: string
+          admin_user_id?: string | null
+          created_at?: string | null
+          id?: string
+          ip_address?: string | null
+          new_values?: Json | null
+          old_values?: Json | null
+          target_id?: string | null
+          target_type?: string | null
+        }
+        Update: {
+          action?: string
+          admin_user_id?: string | null
+          created_at?: string | null
+          id?: string
+          ip_address?: string | null
+          new_values?: Json | null
+          old_values?: Json | null
+          target_id?: string | null
+          target_type?: string | null
+        }
+        Relationships: []
+      }
+      admin_bank_accounts: {
+        Row: {
+          account_holder: string | null
+          bank_name: string | null
+          bic_swift: string | null
+          created_at: string | null
+          iban: string | null
+          id: string
+          is_active: boolean | null
+          notes: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          account_holder?: string | null
+          bank_name?: string | null
+          bic_swift?: string | null
+          created_at?: string | null
+          iban?: string | null
+          id?: string
+          is_active?: boolean | null
+          notes?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          account_holder?: string | null
+          bank_name?: string | null
+          bic_swift?: string | null
+          created_at?: string | null
+          iban?: string | null
+          id?: string
+          is_active?: boolean | null
+          notes?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      admin_profiles: {
+        Row: {
+          app_name: string | null
+          balance: number | null
+          created_at: string | null
+          email: string | null
+          full_name: string | null
+          id: string
+          last_login: string | null
+          metadata: Json | null
+          notifications_enabled: boolean | null
+          role: string
+          subscription_end: string | null
+          subscription_plan: string | null
+          subscription_provider: string | null
+          subscription_start: string | null
+          subscription_status: string | null
+          total_paid: number | null
+          updated_at: string | null
+          whatsapp_number: string | null
+        }
+        Insert: {
+          app_name?: string | null
+          balance?: number | null
+          created_at?: string | null
+          email?: string | null
+          full_name?: string | null
+          id: string
+          last_login?: string | null
+          metadata?: Json | null
+          notifications_enabled?: boolean | null
+          role?: string
+          subscription_end?: string | null
+          subscription_plan?: string | null
+          subscription_provider?: string | null
+          subscription_start?: string | null
+          subscription_status?: string | null
+          total_paid?: number | null
+          updated_at?: string | null
+          whatsapp_number?: string | null
+        }
+        Update: {
+          app_name?: string | null
+          balance?: number | null
+          created_at?: string | null
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          last_login?: string | null
+          metadata?: Json | null
+          notifications_enabled?: boolean | null
+          role?: string
+          subscription_end?: string | null
+          subscription_plan?: string | null
+          subscription_provider?: string | null
+          subscription_start?: string | null
+          subscription_status?: string | null
+          total_paid?: number | null
+          updated_at?: string | null
+          whatsapp_number?: string | null
+        }
+        Relationships: []
+      }
+      admin_transactions: {
+        Row: {
+          amount: number
+          app_name: string | null
+          created_at: string | null
+          currency: string | null
+          id: string
+          metadata: Json | null
+          provider: string | null
+          status: string
+          stripe_payment_intent_id: string | null
+          transaction_type: string
+          user_id: string | null
+        }
+        Insert: {
+          amount: number
+          app_name?: string | null
+          created_at?: string | null
+          currency?: string | null
+          id?: string
+          metadata?: Json | null
+          provider?: string | null
+          status?: string
+          stripe_payment_intent_id?: string | null
+          transaction_type: string
+          user_id?: string | null
+        }
+        Update: {
+          amount?: number
+          app_name?: string | null
+          created_at?: string | null
+          currency?: string | null
+          id?: string
+          metadata?: Json | null
+          provider?: string | null
+          status?: string
+          stripe_payment_intent_id?: string | null
+          transaction_type?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "admin_transactions_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "admin_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       app_settings: {
         Row: {
           id: string
