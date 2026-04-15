@@ -1,8 +1,8 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { APP_NAMES, getAppRevenue } from "@/data/adminMockData";
+import { APP_NAMES, getAppRevenue, type AdminTransaction } from "@/hooks/useAdminData";
 
-export function AdminAppRevenue() {
-  const revenues = APP_NAMES.map(name => ({ name, ...getAppRevenue(name) }));
+export function AdminAppRevenue({ transactions }: { transactions: AdminTransaction[] }) {
+  const revenues = APP_NAMES.map(name => ({ name, ...getAppRevenue(transactions, name) }));
   const grandTotal = revenues.reduce((s, r) => s + r.total, 0);
 
   return (
