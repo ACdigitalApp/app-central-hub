@@ -6,10 +6,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Copy, Pencil, Shield } from "lucide-react";
 import { AdminSidebar } from "@/components/admin/AdminSidebar";
-import { mockBankAccount, mockAdminTransactions, mockActivityLogs } from "@/data/adminMockData";
+import { useAdminBankAccounts, useAdminTransactions, useAdminActivityLogs } from "@/hooks/useAdminData";
 import { useAdmin } from "@/hooks/useAdmin";
 import { Navigate } from "react-router-dom";
 import { toast } from "@/hooks/use-toast";
+import { Skeleton } from "@/components/ui/skeleton";
 
 function CopyField({ label, value }: { label: string; value: string }) {
   const copy = () => {
@@ -27,7 +28,8 @@ function CopyField({ label, value }: { label: string; value: string }) {
   );
 }
 
-function formatDate(d: string) {
+function formatDate(d: string | null) {
+  if (!d) return "—";
   return new Date(d).toLocaleDateString("it-IT", { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" });
 }
 
@@ -39,13 +41,17 @@ const statusColors: Record<string, string> = {
 };
 
 export default function AdminBankDetails() {
-  const { isAdmin, loading } = useAdmin();
+  const { isAdmin, loading: adminLoading } = useAdmin();
+  const { accounts, loading: bankLoading } = useAdminBankAccounts();
+  const { transactions, loading: txLoading } = useAdminTransactions();
+  const { logs, loading: logsLoading } = useAdminActivityLogs();
   const [editing, setEditing] = useState(false);
 
-  if (loading) return <div className="flex items-center justify-center min-h-screen">Caricamento...</div>;
+  if (adminLoading) return <div className="flex items-center justify-center min-h-screen">Caricamento...</div>;
   if (!isAdmin) return <Navigate to="/" replace />;
 
-  const bank = mockBankAccount;
+  const loading = bankLoading || txLoading || logsLoading;
+  const bank = accounts[0];
 
   return (
     <div className="flex min-h-screen bg-background">
@@ -61,93 +67,107 @@ export default function AdminBankDetails() {
           </Badge>
         </div>
 
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg">Coordinate Bancarie</CardTitle>
-            <CardDescription>IBAN e dati per ricezione pagamenti</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Tabs defaultValue="coordinate">
-              <TabsList>
-                <TabsTrigger value="coordinate">Coordinate</TabsTrigger>
-                <TabsTrigger value="transactions">Transazioni</TabsTrigger>
-                <TabsTrigger value="logs">Log</TabsTrigger>
-              </TabsList>
+        {loading ? (
+          <Skeleton className="h-96 rounded-lg" />
+        ) : (
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">Coordinate Bancarie</CardTitle>
+              <CardDescription>IBAN e dati per ricezione pagamenti</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Tabs defaultValue="coordinate">
+                <TabsList>
+                  <TabsTrigger value="coordinate">Coordinate</TabsTrigger>
+                  <TabsTrigger value="transactions">Transazioni</TabsTrigger>
+                  <TabsTrigger value="logs">Log</TabsTrigger>
+                </TabsList>
 
-              <TabsContent value="coordinate" className="mt-4">
-                <div className="max-w-lg space-y-0">
-                  <CopyField label="Intestatario" value={bank.account_holder} />
-                  <CopyField label="Banca" value={bank.bank_name} />
-                  <CopyField label="IBAN" value={bank.iban} />
-                  <CopyField label="BIC/SWIFT" value={bank.bic_swift} />
-                </div>
-                <Button variant="outline" size="sm" className="mt-4" onClick={() => setEditing(!editing)}>
-                  <Pencil className="h-4 w-4 mr-1" />{editing ? "Salva" : "Modifica"}
-                </Button>
-              </TabsContent>
+                <TabsContent value="coordinate" className="mt-4">
+                  {bank ? (
+                    <>
+                      <div className="max-w-lg space-y-0">
+                        <CopyField label="Intestatario" value={bank.account_holder ?? "—"} />
+                        <CopyField label="Banca" value={bank.bank_name ?? "—"} />
+                        <CopyField label="IBAN" value={bank.iban ?? "—"} />
+                        <CopyField label="BIC/SWIFT" value={bank.bic_swift ?? "—"} />
+                      </div>
+                      <Button variant="outline" size="sm" className="mt-4" onClick={() => setEditing(!editing)}>
+                        <Pencil className="h-4 w-4 mr-1" />{editing ? "Salva" : "Modifica"}
+                      </Button>
+                    </>
+                  ) : (
+                    <p className="text-muted-foreground text-sm py-8 text-center">Nessun dato bancario inserito.</p>
+                  )}
+                </TabsContent>
 
-              <TabsContent value="transactions" className="mt-4">
-                <div className="rounded-lg border overflow-auto">
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Data</TableHead>
-                        <TableHead>Tipo</TableHead>
-                        <TableHead>App</TableHead>
-                        <TableHead className="text-right">Importo</TableHead>
-                        <TableHead>Provider</TableHead>
-                        <TableHead>Stato</TableHead>
-                        <TableHead>ID Transazione</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {mockAdminTransactions.map(t => (
-                        <TableRow key={t.id}>
-                          <TableCell className="text-xs">{formatDate(t.created_at)}</TableCell>
-                          <TableCell className="capitalize text-sm">{t.transaction_type}</TableCell>
-                          <TableCell className="text-sm">{t.app_name}</TableCell>
-                          <TableCell className="text-right font-medium">€{t.amount.toFixed(2)}</TableCell>
-                          <TableCell className="text-sm">{t.provider}</TableCell>
-                          <TableCell><Badge className={`text-xs ${statusColors[t.status] || ""}`} variant="secondary">{t.status}</Badge></TableCell>
-                          <TableCell className="text-xs font-mono">{t.stripe_payment_intent_id}</TableCell>
+                <TabsContent value="transactions" className="mt-4">
+                  <div className="rounded-lg border overflow-auto">
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>Data</TableHead>
+                          <TableHead>Tipo</TableHead>
+                          <TableHead>App</TableHead>
+                          <TableHead className="text-right">Importo</TableHead>
+                          <TableHead>Provider</TableHead>
+                          <TableHead>Stato</TableHead>
+                          <TableHead>ID Transazione</TableHead>
                         </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </div>
-              </TabsContent>
+                      </TableHeader>
+                      <TableBody>
+                        {transactions.length === 0 ? (
+                          <TableRow><TableCell colSpan={7} className="text-center py-8 text-muted-foreground">Nessuna transazione</TableCell></TableRow>
+                        ) : transactions.map(t => (
+                          <TableRow key={t.id}>
+                            <TableCell className="text-xs">{formatDate(t.created_at)}</TableCell>
+                            <TableCell className="capitalize text-sm">{t.transaction_type}</TableCell>
+                            <TableCell className="text-sm">{t.app_name ?? "—"}</TableCell>
+                            <TableCell className="text-right font-medium">€{t.amount.toFixed(2)}</TableCell>
+                            <TableCell className="text-sm">{t.provider ?? "—"}</TableCell>
+                            <TableCell><Badge className={`text-xs ${statusColors[t.status] || ""}`} variant="secondary">{t.status}</Badge></TableCell>
+                            <TableCell className="text-xs font-mono">{t.stripe_payment_intent_id ?? "—"}</TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </div>
+                </TabsContent>
 
-              <TabsContent value="logs" className="mt-4">
-                <div className="rounded-lg border overflow-auto">
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Data</TableHead>
-                        <TableHead>Azione</TableHead>
-                        <TableHead>Tipo</TableHead>
-                        <TableHead>Dettagli</TableHead>
-                        <TableHead>IP</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {mockActivityLogs.map(l => (
-                        <TableRow key={l.id}>
-                          <TableCell className="text-xs">{formatDate(l.created_at)}</TableCell>
-                          <TableCell className="text-sm font-medium">{l.action}</TableCell>
-                          <TableCell className="text-sm capitalize">{l.target_type}</TableCell>
-                          <TableCell className="text-xs font-mono max-w-[200px] truncate">
-                            {l.new_values ? JSON.stringify(l.new_values) : "—"}
-                          </TableCell>
-                          <TableCell className="text-xs">{l.ip_address}</TableCell>
+                <TabsContent value="logs" className="mt-4">
+                  <div className="rounded-lg border overflow-auto">
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>Data</TableHead>
+                          <TableHead>Azione</TableHead>
+                          <TableHead>Tipo</TableHead>
+                          <TableHead>Dettagli</TableHead>
+                          <TableHead>IP</TableHead>
                         </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </div>
-              </TabsContent>
-            </Tabs>
-          </CardContent>
-        </Card>
+                      </TableHeader>
+                      <TableBody>
+                        {logs.length === 0 ? (
+                          <TableRow><TableCell colSpan={5} className="text-center py-8 text-muted-foreground">Nessun log</TableCell></TableRow>
+                        ) : logs.map(l => (
+                          <TableRow key={l.id}>
+                            <TableCell className="text-xs">{formatDate(l.created_at)}</TableCell>
+                            <TableCell className="text-sm font-medium">{l.action}</TableCell>
+                            <TableCell className="text-sm capitalize">{l.target_type ?? "—"}</TableCell>
+                            <TableCell className="text-xs font-mono max-w-[200px] truncate">
+                              {l.new_values ? JSON.stringify(l.new_values) : "—"}
+                            </TableCell>
+                            <TableCell className="text-xs">{l.ip_address ?? "—"}</TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </div>
+                </TabsContent>
+              </Tabs>
+            </CardContent>
+          </Card>
+        )}
       </main>
     </div>
   );
