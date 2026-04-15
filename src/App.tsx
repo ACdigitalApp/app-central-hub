@@ -21,6 +21,8 @@ import Plans from "./pages/Plans";
 import Archive from "./pages/Archive";
 import Pricing from "./pages/Pricing";
 import BankCoordinates from "./pages/BankCoordinates";
+import AdminUsersNew from "./pages/AdminUsersNew";
+import AdminBankDetails from "./pages/AdminBankDetails";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -51,6 +53,8 @@ const App = () => (
                 <Route path="/archive" element={<ProtectedRoute><Archive /></ProtectedRoute>} />
                 <Route path="/admin/users" element={<ProtectedRoute><AdminUsers /></ProtectedRoute>} />
                 <Route path="/admin/bancari" element={<ProtectedRoute><BankCoordinates /></ProtectedRoute>} />
+                <Route path="/admin/users-new" element={<ProtectedRoute><AdminUsersNew /></ProtectedRoute>} />
+                <Route path="/admin/bank-details" element={<ProtectedRoute><AdminBankDetails /></ProtectedRoute>} />
                 <Route path="/pricing" element={<Pricing />} />
                 
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
