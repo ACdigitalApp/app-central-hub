@@ -21,6 +21,8 @@ import Plans from "./pages/Plans";
 import Archive from "./pages/Archive";
 import Pricing from "./pages/Pricing";
 import BankCoordinates from "./pages/BankCoordinates";
+import AdminUsersNew from "./pages/AdminUsersNew";
+import AdminBankDetails from "./pages/AdminBankDetails";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
