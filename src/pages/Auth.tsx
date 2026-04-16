@@ -1,29 +1,29 @@
-import { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { Mail, Lock, User, Loader2, ArrowRight, ArrowLeft, Eye, EyeOff } from 'lucide-react';
-import { z } from 'zod';
-import { useAuth, supabase } from '@/hooks/useAuth';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { useToast } from '@/hooks/use-toast';
-import euro100 from '@/assets/2-euro-coin.png';
+import { useState, useEffect } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import { motion } from "framer-motion";
+import { Mail, Lock, User, Loader2, ArrowRight, ArrowLeft, Eye, EyeOff } from "lucide-react";
+import { z } from "zod";
+import { useAuth, supabase } from "@/hooks/useAuth";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useToast } from "@/hooks/use-toast";
+import euro100 from "@/assets/2-euro-coin.png";
 
 const loginSchema = z.object({
-  email: z.string().email(`Email non valida`),
-  password: z.string().min(6, `La password deve avere almeno 6 caratteri`)
+  email: z.string().email("Email non valida"),
+  password: z.string().min(6, "La password deve avere almeno 6 caratteri")
 });
 
 const signupSchema = loginSchema.extend({
-  fullName: z.string().min(2, `Il nome deve avere almeno 2 caratteri`)
+  fullName: z.string().min(2, "Il nome deve avere almeno 2 caratteri")
 });
 
 export default function Auth() {
   const [isLogin, setIsLogin] = useState(true);
-  const [email, setEmail] = useState(``);
-  const [password, setPassword] = useState(``);
-  const [fullName, setFullName] = useState(``);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [fullName, setFullName] = useState("");
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [showPassword, setShowPassword] = useState(false);
@@ -36,16 +36,16 @@ export default function Auth() {
 
   useEffect(() => {
     if (user) {
-      navigate(`/`);
+      navigate("/");
     }
   }, [user, navigate]);
 
   const handleResetPassword = async () => {
     if (!email.trim()) {
       toast({
-        title: `Email richiesta`,
-        description: `Inserisci la tua email per recuperare la password.`,
-        variant: `destructive`
+        title: "Email richiesta",
+        description: "Inserisci la tua email per recuperare la password.",
+        variant: "destructive"
       });
       return;
     }
@@ -53,9 +53,9 @@ export default function Auth() {
     const emailValidation = z.string().email().safeParse(email);
     if (!emailValidation.success) {
       toast({
-        title: `Email non valida`,
-        description: `Inserisci un indirizzo email valido.`,
-        variant: `destructive`
+        title: "Email non valida",
+        description: "Inserisci un indirizzo email valido.",
+        variant: "destructive"
       });
       return;
     }
@@ -68,22 +68,22 @@ export default function Auth() {
 
       if (error) {
         toast({
-          title: `Errore`,
-          description: `Si è verificato un errore. Riprova più tardi.`,
-          variant: `destructive`
+          title: "Errore",
+          description: "Si e verificato un errore. Riprova piu tardi.",
+          variant: "destructive"
         });
       } else {
         toast({
-          title: `Email inviata!`,
-          description: `Controlla la tua casella email per recuperare la password.`,
+          title: "Email inviata!",
+          description: "Controlla la tua casella email per recuperare la password.",
         });
         setIsResettingPassword(false);
       }
     } catch (err) {
       toast({
-        title: `Errore`,
-        description: `Si è verificato un errore. Riprova.`,
-        variant: `destructive`
+        title: "Errore",
+        description: "Si e verificato un errore. Riprova.",
+        variant: "destructive"
       });
     } finally {
       setResetLoading(false);
@@ -115,62 +115,62 @@ export default function Auth() {
       if (isLogin) {
         const { error } = await signIn(email, password);
         if (error) {
-          console.error(`Auth error:`, error);
-          if (error.message.includes(`Invalid login`) || error.message.includes(`invalid_credentials`)) {
+          console.error("Auth error:", error);
+          if (error.message.includes("Invalid login") || error.message.includes("invalid_credentials")) {
             toast({
-              title: `Credenziali non valide`,
-              description: `Email o password errati. Riprova.`,
-              variant: `destructive`
+              title: "Credenziali non valide",
+              description: "Email o password errati. Riprova.",
+              variant: "destructive"
             });
-          } else if (error.message.includes(`Email not confirmed`)) {
+          } else if (error.message.includes("Email not confirmed")) {
             toast({
-              title: `Email non confermata`,
-              description: `Verifica la tua email prima di accedere.`,
-              variant: `destructive`
+              title: "Email non confermata",
+              description: "Verifica la tua email prima di accedere.",
+              variant: "destructive"
             });
           } else {
             toast({
-              title: `Errore di accesso`,
-              description: `Si è verificato un errore. Riprova più tardi.`,
-              variant: `destructive`
+              title: "Errore di accesso",
+              description: "Si e verificato un errore. Riprova piu tardi.",
+              variant: "destructive"
             });
           }
         }
       } else {
         const { error } = await signUp(email, password, fullName);
         if (error) {
-          console.error(`Signup error:`, error);
-          if (error.message.includes(`already registered`) || error.message.includes(`already exists`)) {
+          console.error("Signup error:", error);
+          if (error.message.includes("already registered") || error.message.includes("already exists")) {
             toast({
-              title: `Email già registrata`,
-              description: `Questa email è già associata a un account. Prova ad accedere.`,
-              variant: `destructive`
+              title: "Email gia registrata",
+              description: "Questa email e gia associata a un account. Prova ad accedere.",
+              variant: "destructive"
             });
-          } else if (error.message.includes(`weak_password`)) {
+          } else if (error.message.includes("weak_password")) {
             toast({
-              title: `Password debole`,
-              description: `La password deve essere più sicura.`,
-              variant: `destructive`
+              title: "Password debole",
+              description: "La password deve essere piu sicura.",
+              variant: "destructive"
             });
           } else {
             toast({
-              title: `Errore di registrazione`,
-              description: `Si è verificato un errore. Riprova più tardi.`,
-              variant: `destructive`
+              title: "Errore di registrazione",
+              description: "Si e verificato un errore. Riprova piu tardi.",
+              variant: "destructive"
             });
           }
         } else {
           toast({
-            title: `Account creato!`,
-            description: `Benvenuto in Gestione Scadenze.`,
+            title: "Account creato!",
+            description: "Benvenuto in Gestione Scadenze.",
           });
         }
       }
     } catch (err) {
       toast({
-        title: `Errore`,
-        description: `Si è verificato un errore. Riprova.`,
-        variant: `destructive`
+        title: "Errore",
+        description: "Si e verificato un errore. Riprova.",
+        variant: "destructive"
       });
     } finally {
       setLoading(false);
@@ -197,16 +197,16 @@ export default function Auth() {
             <motion.div
               initial={{ scale: 0.8 }}
               animate={{ scale: 1 }}
-              transition={{ delay: 0.1, type: `spring` }}
+              transition={{ delay: 0.1, type: "spring" }}
               className="w-16 h-16 mx-auto mb-4 flex items-center justify-center"
             >
               <img src={euro100} alt="100 Euro" className="w-full h-full object-contain" />
             </motion.div>
             <h1 className="text-2xl font-bold text-foreground mb-2">
-              {isLogin ? `Bentornato!` : `Crea Account`}
+              {isLogin ? "Bentornato!" : "Crea Account"}
             </h1>
             <p className="text-muted-foreground">
-              {isLogin ? `Accedi per gestire le tue scadenze` : `Inizia a gestire le tue finanze`}
+              {isLogin ? "Accedi per gestire le tue scadenze" : "Inizia a gestire le tue finanze"}
             </p>
           </div>
 
@@ -214,7 +214,7 @@ export default function Auth() {
             {!isLogin && (
               <motion.div
                 initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: `auto` }}
+                animate={{ opacity: 1, height: "auto" }}
                 exit={{ opacity: 0, height: 0 }}
               >
                 <Label htmlFor="fullName" className="text-foreground">Nome completo</Label>
@@ -264,12 +264,12 @@ export default function Auth() {
                 <Input
                   id="password"
                   name="password"
-                  type={showPassword ? `text` : `password`}
+                  type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
                   className="pl-10 pr-10"
-                  autoComplete={isLogin ? `current-password` : `new-password`}
+                  autoComplete={isLogin ? "current-password" : "new-password"}
                   autoCapitalize="none"
                   autoCorrect="off"
                 />
@@ -277,7 +277,7 @@ export default function Auth() {
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors z-10"
-                  aria-label={showPassword ? `Nascondi password` : `Mostra password`}
+                  aria-label={showPassword ? "Nascondi password" : "Mostra password"}
                 >
                   {showPassword ? (
                     <EyeOff className="w-5 h-5" />
@@ -309,7 +309,7 @@ export default function Auth() {
                 <Loader2 className="w-5 h-5 animate-spin" />
               ) : (
                 <>
-                  {isLogin ? `Accedi` : `Registrati`}
+                  {isLogin ? "Accedi" : "Registrati"}
                   <ArrowRight className="w-5 h-5 ml-2" />
                 </>
               )}
@@ -371,7 +371,7 @@ export default function Auth() {
                       {resetLoading ? (
                         <Loader2 className="w-5 h-5 animate-spin" />
                       ) : (
-                        `Invia link`
+                        "Invia link"
                       )}
                     </Button>
                   </div>
@@ -392,7 +392,7 @@ export default function Auth() {
               {isLogin ? (
                 <>Non hai un account? <span className="text-primary font-medium">Registrati</span></>
               ) : (
-                <>Hai già un account? <span className="text-primary font-medium">Accedi</span></>
+                <>Hai gia un account? <span className="text-primary font-medium">Accedi</span></>
               )}
             </button>
           </div>
