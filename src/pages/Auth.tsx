@@ -136,6 +136,7 @@ export default function Auth() {
             });
           }
         }
+        // Se non c'è errore, l'useEffect (riga 45) rileverà 'user' e reindirizzerà automaticamente
       } else {
         const { error } = await signUp(email, password, fullName);
         if (error) {
@@ -162,7 +163,7 @@ export default function Auth() {
         } else {
           toast({
             title: 'Account creato!',
-            description: 'Benvenuto in Gestione Scadenze.'
+            description: 'Benvenuto in Gestione Scadenze.',
           });
         }
       }
@@ -179,7 +180,6 @@ export default function Auth() {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-background">
-      {/* Back to landing button */}
       <Link to="/landing" className="absolute top-4 left-4">
         <Button variant="ghost" size="sm" className="gap-2">
           <ArrowLeft className="w-4 h-4" />
@@ -317,7 +317,6 @@ export default function Auth() {
             </Button>
           </form>
 
-          {/* Password Reset Modal */}
           {isResettingPassword && (
             <motion.div
               initial={{ opacity: 0 }}
@@ -342,15 +341,15 @@ export default function Auth() {
                       <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                       <Input
                         id="reset-email"
-                          name="reset-email"
+                        name="reset-email"
                         type="email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         placeholder="mario@esempio.it"
                         className="pl-10"
-                          autoComplete="email"
-                          autoCapitalize="none"
-                          autoCorrect="off"
+                        autoComplete="email"
+                        autoCapitalize="none"
+                        autoCorrect="off"
                       />
                     </div>
                   </div>
