@@ -95,7 +95,7 @@ export default function Auth() {
       } else {
         toast({
           title: 'Email inviata!',
- description: Controlla la tua casella email per recuperare lapassword.',
+ description: 'Controlla la tua casella email per recuperare la password.',
         });
         setIsResettingPassword(false);
       }
