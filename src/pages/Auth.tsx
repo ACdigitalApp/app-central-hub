@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Mail, Lock, User, Loader2, ArrowRight, ArrowLeft, Eye, EyeOff } 
-from 'lucide-react';
+import { Mail, Lock, User, Loader2, ArrowRight, ArrowLeft, Eye, EyeOff } from 'lucide-react';
 import { z } from 'zod';
 import { useAuth, supabase } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
@@ -41,10 +40,8 @@ export default function Auth() {
     }
   }, [user, navigate]);
 
-  // 🔥 EFFETTO PER SALVARE LE CREDENZIALI NEL BROWSER
   useEffect(() => {
     if (user && email && password && isLogin) {
-      // Aspetta un attimo che il login sia completato
       setTimeout(() => {
         if (navigator.credentials && navigator.credentials.store) {
           navigator.credentials.store({
@@ -52,9 +49,7 @@ export default function Auth() {
             id: email,
             password: password,
             name: email
-          }).catch(() => {
-            // Errore silenzioso - il browser gestirà il popup
-          });
+          } as any).catch(() => {});
         }
       }, 1000);
     }
@@ -95,7 +90,7 @@ export default function Auth() {
       } else {
         toast({
           title: 'Email inviata!',
- description: Controlla la tua casella email per recuperare lapassword.',
+          description: 'Controlla la tua casella email per recuperare la password.',
         });
         setIsResettingPassword(false);
       }
@@ -117,9 +112,8 @@ export default function Auth() {
 
     try {
       const schema = isLogin ? loginSchema : signupSchema;
-      const data = isLogin ? { email, password } : { email, password, 
-fullName };
-      
+      const data = isLogin ? { email, password } : { email, password, fullName };
+
       const validation = schema.safeParse(data);
       if (!validation.success) {
         const fieldErrors: Record<string, string> = {};
@@ -137,8 +131,7 @@ fullName };
         const { error } = await signIn(email, password);
         if (error) {
           console.error('Auth error:', error);
-          if (error.message.includes('Invalid login') || 
-error.message.includes('invalid_credentials')) {
+          if (error.message.includes('Invalid login') || error.message.includes('invalid_credentials')) {
             toast({
               title: 'Credenziali non valide',
               description: 'Email o password errati. Riprova.',
@@ -153,8 +146,7 @@ error.message.includes('invalid_credentials')) {
           } else {
             toast({
               title: 'Errore di accesso',
-              description: 'Si è verificato un errore. Riprova più 
-tardi.',
+              description: 'Si è verificato un errore. Riprova più tardi.',
               variant: 'destructive'
             });
           }
@@ -163,12 +155,10 @@ tardi.',
         const { error } = await signUp(email, password, fullName);
         if (error) {
           console.error('Signup error:', error);
-          if (error.message.includes('already registered') || 
-error.message.includes('already exists')) {
+          if (error.message.includes('already registered') || error.message.includes('already exists')) {
             toast({
               title: 'Email già registrata',
-              description: 'Questa email è già associata a un account. 
-Prova ad accedere.',
+              description: 'Questa email è già associata a un account. Prova ad accedere.',
               variant: 'destructive'
             });
           } else if (error.message.includes('weak_password')) {
@@ -180,8 +170,7 @@ Prova ad accedere.',
           } else {
             toast({
               title: 'Errore di registrazione',
-              description: 'Si è verificato un errore. Riprova più 
-tardi.',
+              description: 'Si è verificato un errore. Riprova più tardi.',
               variant: 'destructive'
             });
           }
@@ -204,16 +193,14 @@ tardi.',
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 
-bg-background">
-      {/* Back to landing button */}
+    <div className="min-h-screen flex items-center justify-center p-4 bg-background">
       <Link to="/landing" className="absolute top-4 left-4">
         <Button variant="ghost" size="sm" className="gap-2">
           <ArrowLeft className="w-4 h-4" />
           Indietro
         </Button>
       </Link>
-      
+
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -226,18 +213,15 @@ bg-background">
               initial={{ scale: 0.8 }}
               animate={{ scale: 1 }}
               transition={{ delay: 0.1, type: 'spring' }}
-              className="w-16 h-16 mx-auto mb-4 flex items-center 
-justify-center"
+              className="w-16 h-16 mx-auto mb-4 flex items-center justify-center"
             >
-              <img src={euro100} alt="100 Euro" className="w-full h-full 
-object-contain" />
+              <img src={euro100} alt="100 Euro" className="w-full h-full object-contain" />
             </motion.div>
             <h1 className="text-2xl font-bold text-foreground mb-2">
               {isLogin ? 'Bentornato!' : 'Crea Account'}
             </h1>
             <p className="text-muted-foreground">
-              {isLogin ? 'Accedi per gestire le tue scadenze' : 'Inizia a 
-gestire le tue finanze'}
+              {isLogin ? 'Accedi per gestire le tue scadenze' : 'Inizia a gestire le tue finanze'}
             </p>
           </div>
 
@@ -248,11 +232,9 @@ gestire le tue finanze'}
                 animate={{ opacity: 1, height: 'auto' }}
                 exit={{ opacity: 0, height: 0 }}
               >
-                <Label htmlFor="fullName" className="text-foreground">Nome 
-completo</Label>
+                <Label htmlFor="fullName" className="text-foreground">Nome completo</Label>
                 <div className="relative mt-1.5">
-                  <User className="absolute left-3 top-1/2 
--translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                  <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                   <Input
                     id="fullName"
                     type="text"
@@ -263,18 +245,15 @@ completo</Label>
                   />
                 </div>
                 {errors.fullName && (
-                  <p className="text-destructive text-sm 
-mt-1">{errors.fullName}</p>
+                  <p className="text-destructive text-sm mt-1">{errors.fullName}</p>
                 )}
               </motion.div>
             )}
 
             <div>
-              <Label htmlFor="email" 
-className="text-foreground">Email</Label>
+              <Label htmlFor="email" className="text-foreground">Email</Label>
               <div className="relative mt-1.5">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 
-w-5 h-5 text-muted-foreground" />
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                 <Input
                   id="email"
                   name="email"
@@ -289,17 +268,14 @@ w-5 h-5 text-muted-foreground" />
                 />
               </div>
               {errors.email && (
-                <p className="text-destructive text-sm 
-mt-1">{errors.email}</p>
+                <p className="text-destructive text-sm mt-1">{errors.email}</p>
               )}
             </div>
 
             <div>
-              <Label htmlFor="password" 
-className="text-foreground">Password</Label>
+              <Label htmlFor="password" className="text-foreground">Password</Label>
               <div className="relative mt-1.5">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 
-w-5 h-5 text-muted-foreground" />
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                 <Input
                   id="password"
                   name="password"
@@ -308,36 +284,27 @@ w-5 h-5 text-muted-foreground" />
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
                   className="pl-10 pr-10"
-                  autoComplete={isLogin ? 'current-password' : 
-'new-password'}
+                  autoComplete={isLogin ? 'current-password' : 'new-password'}
                   autoCapitalize="none"
                   autoCorrect="off"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 
-text-muted-foreground hover:text-foreground transition-colors z-10"
-                  aria-label={showPassword ? 'Nascondi password' : 'Mostra 
-password'}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors z-10"
+                  aria-label={showPassword ? 'Nascondi password' : 'Mostra password'}
                 >
-                  {showPassword ? (
-                    <EyeOff className="w-5 h-5" />
-                  ) : (
-                    <Eye className="w-5 h-5" />
-                  )}
+                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
               </div>
               {errors.password && (
-                <p className="text-destructive text-sm 
-mt-1">{errors.password}</p>
+                <p className="text-destructive text-sm mt-1">{errors.password}</p>
               )}
               {isLogin && (
                 <button
                   type="button"
                   onClick={() => setIsResettingPassword(true)}
-                  className="text-sm text-primary hover:text-primary/80 
-transition-colors mt-2"
+                  className="text-sm text-primary hover:text-primary/80 transition-colors mt-2"
                 >
                   Non ricordi la password?
                 </button>
@@ -347,8 +314,7 @@ transition-colors mt-2"
             <Button
               type="submit"
               disabled={loading}
-              className="w-full gradient-primary text-primary-foreground 
-hover:opacity-90 transition-opacity"
+              className="w-full gradient-primary text-primary-foreground hover:opacity-90 transition-opacity"
             >
               {loading ? (
                 <Loader2 className="w-5 h-5 animate-spin" />
@@ -361,36 +327,28 @@ hover:opacity-90 transition-opacity"
             </Button>
           </form>
 
-          {/* Password Reset Modal */}
           {isResettingPassword && (
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="fixed inset-0 bg-black/50 flex items-center 
-justify-center z-50 p-4"
-              onClick={(e) => e.target === e.currentTarget && 
-setIsResettingPassword(false)}
+              className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+              onClick={(e) => e.target === e.currentTarget && setIsResettingPassword(false)}
             >
               <motion.div
                 initial={{ scale: 0.9, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
-                className="bg-card rounded-2xl p-6 w-full max-w-md 
-shadow-xl"
+                className="bg-card rounded-2xl p-6 w-full max-w-md shadow-xl"
               >
-                <h2 className="text-xl font-bold text-foreground 
-mb-2">Recupera Password</h2>
+                <h2 className="text-xl font-bold text-foreground mb-2">Recupera Password</h2>
                 <p className="text-muted-foreground text-sm mb-4">
-                  Inserisci la tua email e ti invieremo un link per 
-reimpostare la password.
+                  Inserisci la tua email e ti invieremo un link per reimpostare la password.
                 </p>
-                
+
                 <div className="space-y-4">
                   <div>
-                    <Label htmlFor="reset-email" 
-className="text-foreground">Email</Label>
+                    <Label htmlFor="reset-email" className="text-foreground">Email</Label>
                     <div className="relative mt-1.5">
-                      <Mail className="absolute left-3 top-1/2 
--translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                      <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                       <Input
                         id="reset-email"
                         name="reset-email"
@@ -405,7 +363,7 @@ className="text-foreground">Email</Label>
                       />
                     </div>
                   </div>
-                  
+
                   <div className="flex gap-3">
                     <Button
                       type="button"
@@ -421,11 +379,7 @@ className="text-foreground">Email</Label>
                       disabled={resetLoading}
                       className="flex-1 gradient-primary"
                     >
-                      {resetLoading ? (
-                        <Loader2 className="w-5 h-5 animate-spin" />
-                      ) : (
-                        'Invia link'
-                      )}
+                      {resetLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Invia link'}
                     </Button>
                   </div>
                 </div>
@@ -440,15 +394,12 @@ className="text-foreground">Email</Label>
                 setIsLogin(!isLogin);
                 setErrors({});
               }}
-              className="text-sm text-muted-foreground 
-hover:text-foreground transition-colors"
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
             >
               {isLogin ? (
-                <>Non hai un account? <span className="text-primary 
-font-medium">Registrati</span></>
+                <>Non hai un account? <span className="text-primary font-medium">Registrati</span></>
               ) : (
-                <>Hai già un account? <span className="text-primary 
-font-medium">Accedi</span></>
+                <>Hai già un account? <span className="text-primary font-medium">Accedi</span></>
               )}
             </button>
           </div>
