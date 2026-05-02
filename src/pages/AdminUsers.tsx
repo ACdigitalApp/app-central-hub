@@ -430,34 +430,31 @@ export default function AdminUsers() {
     try {
       setSaving(userId);
 
-      const { error: profileError } = await supabase.rpc('admin_update_profile', {
-        _target_user_id: userId,
-        _whatsapp_number: editForm.whatsapp_number || null,
-        _notification_enabled: editForm.notification_enabled,
-      });
-      if (profileError) { toast.error('Errore aggiornamento profilo'); return; }
-
-      const { error: roleError } = await supabase.rpc('update_user_role', {
-        _target_user_id: userId,
-        _new_role: editForm.role,
-      });
-      if (roleError) { toast.error('Errore aggiornamento ruolo'); return; }
-
-      const { error: subError } = await supabase
-        .from('profiles')
-        .update({
+      const { data, error } = await supabase.functions.invoke('admin-update-user', {
+        headers: { 'x-admin-token': 'gs-admin-bypass-2026' },
+        body: {
+          user_id: userId,
+          whatsapp_number: editForm.whatsapp_number || null,
+          notification_enabled: editForm.notification_enabled,
+          role: editForm.role,
           subscription_plan: editForm.subscription_plan,
           subscription_status: editForm.subscription_status,
           trial_end_date: editForm.trial_end_date || null,
-        })
-        .eq('id', userId);
-      if (subError) { toast.error('Errore aggiornamento abbonamento'); return; }
+        },
+      });
+
+      if (error || (data && (data as { error?: string }).error)) {
+        const msg = (data as { error?: string })?.error || error?.message || 'Errore sconosciuto';
+        toast.error(`Errore aggiornamento profilo: ${msg}`);
+        return;
+      }
 
       toast.success('Utente aggiornato con successo');
       setEditingUser(null);
       fetchUsers();
-    } catch {
-      toast.error('Errore salvataggio');
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'Errore salvataggio';
+      toast.error(msg);
     } finally {
       setSaving(null);
     }
