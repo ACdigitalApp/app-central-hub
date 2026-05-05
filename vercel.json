@@ -27,6 +27,19 @@
       ]
     },
     {
+      "source": "/llms.txt",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "text/plain; charset=utf-8"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
+    },
+    {
       "source": "/manifest.webmanifest",
       "headers": [
         {
@@ -38,7 +51,7 @@
   ],
   "rewrites": [
     {
-      "source": "/((?!sitemap\\.xml|robots\\.txt|manifest\\.webmanifest|favicon\\.ico|assets/.*|pwa-.*\\.png).*)",
+      "source": "/((?!sitemap\\.xml|robots\\.txt|llms\\.txt|manifest\\.webmanifest|favicon\\.ico|assets/.*|pwa-.*\\.png).*)",
       "destination": "/index.html"
     }
   ]
