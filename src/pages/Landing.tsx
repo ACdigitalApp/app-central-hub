@@ -3,7 +3,9 @@ import { motion } from 'framer-motion';
 import { ArrowRight, Shield, Bell, TrendingUp, Smartphone, Download, CheckCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { PWAInstallButton } from '@/components/PWAInstallButton';
+import { SEO } from '@/components/SEO';
 import euroNote from '@/assets/100-euro-note.png';
 import euroCoin from '@/assets/2-euro-coin.png';
 
