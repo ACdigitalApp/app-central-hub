@@ -1,7 +1,1 @@
 project_id = "bdckpxxuufjbxnibccjb"
-
-[functions.admin-update-user]
-verify_jwt = false
-
-[functions.admin-get-users]
-verify_jwt = false

@@ -275,40 +275,20 @@ export default function AdminUsers() {
     try {
       setLoading(true);
 
-      // Bypass users (no real Supabase JWT) → use edge function with service role
-      const isBypassUser = user?.id === 'admin-bypass-001';
-
-      if (isBypassUser) {
-        // Try edge function first (deployed on tbqreletxtzaosvyyvnv)
-        const { data: fnData, error: fnError } = await supabase.functions.invoke('admin-get-users', {
-          headers: { 'x-admin-token': 'gs-admin-bypass-2026' },
-        });
-        if (!fnError && fnData?.users) {
-          setUsers(fnData.users as UserProfile[]);
-          return;
-        }
-        // Edge function not on this project — sign in with real credentials
-        // then call RPC directly in the same flow (no need to wait for re-render)
-        const { error: signInErr } = await supabase.auth.signInWithPassword({
-          email: 'acdigital.app@gmail.com',
-          password: 'acdigital2026',
-        });
-        if (signInErr) {
-          toast.error('Errore caricamento: ' + signInErr.message);
-          setUsers([]);
-          return;
-        }
-        // Session is now set — fall through to RPC path below
+      // Use edge function (validates JWT + admin role server-side)
+      const { data: fnData, error: fnError } = await supabase.functions.invoke('admin-get-users');
+      if (!fnError && fnData?.users) {
+        setUsers(fnData.users as UserProfile[]);
+        return;
       }
 
-      // Real admin user → use RPC
+      // Fallback to RPC (still requires real JWT + admin role)
       const { data: rpcData, error } = await supabase.rpc('get_all_users_for_admin');
       if (error) { toast.error('Errore nel caricamento utenti'); return; }
       if (!rpcData || rpcData.length === 0) { setUsers([]); return; }
 
       const ids = (rpcData as { id: string }[]).map(u => u.id);
 
-      // Fetch extended profile data
       const { data: profilesData } = await supabase
         .from('profiles')
         .select('id, subscription_plan, subscription_status, stripe_customer_id, trial_end_date')
@@ -431,7 +411,6 @@ export default function AdminUsers() {
       setSaving(userId);
 
       const { data, error } = await supabase.functions.invoke('admin-update-user', {
-        headers: { 'x-admin-token': 'gs-admin-bypass-2026' },
         body: {
           user_id: userId,
           whatsapp_number: editForm.whatsapp_number || null,
