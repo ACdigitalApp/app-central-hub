@@ -99,18 +99,18 @@ export default function Dashboard() {
           className="mb-6"
         >
           <div className="flex items-center justify-between flex-wrap gap-3">
-            <div className="flex items-end gap-3">
-              <div className="coin-container">
+            <div className="flex items-baseline gap-3">
+              <div className="coin-container self-center">
                 <div className="banknote-shine coin-rotate w-10 h-10 md:w-12 md:h-12 rounded-full">
                   <img src={euroCoin} alt="Euro" className="w-10 h-10 md:w-12 md:h-12 object-contain" />
                 </div>
               </div>
-              <h1 className="text-2xl md:text-3xl font-bold text-[#067d1c] leading-none">
+              <h1 className="text-2xl md:text-3xl font-bold text-[#067d1c]">
                 Gestione Scadenze
               </h1>
               <a
                 href="mailto:acdigital.app@gmail.com"
-                className="text-xs md:text-sm font-medium text-muted-foreground hover:text-primary transition-colors underline-offset-2 hover:underline leading-none pb-1"
+                className="text-xs md:text-sm font-medium text-muted-foreground hover:text-primary transition-colors underline-offset-2 hover:underline"
                 aria-label="Contatta AC Digital App via email"
               >
                 by AC Digital App

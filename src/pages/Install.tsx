@@ -112,13 +112,13 @@ export default function Install() {
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-8"
         >
-          <div className="flex items-end justify-center gap-2 mb-2">
-            <h1 className="text-2xl md:text-3xl font-bold text-primary leading-none">
+          <div className="flex items-baseline justify-center gap-2 mb-2">
+            <h1 className="text-2xl md:text-3xl font-bold text-primary">
               Installa Gestione Scadenze
             </h1>
             <a
               href="mailto:acdigital.app@gmail.com"
-              className="text-xs font-medium text-muted-foreground hover:text-primary transition-colors underline-offset-2 hover:underline leading-none pb-1"
+              className="text-xs font-medium text-muted-foreground hover:text-primary transition-colors underline-offset-2 hover:underline"
               aria-label="Contatta AC Digital App via email"
             >
               by AC Digital App
