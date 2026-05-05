@@ -8,4 +8,4 @@ Disallow: /transactions
 Disallow: /checkout
 Disallow: /billing
 
-Sitemap: https://www.gestionescadenze.app/sitemap.xml
+Sitemap: https://gestionescadenze.app/sitemap.xml
