@@ -204,13 +204,13 @@ export default function Landing() {
       {/* Footer */}
       <footer className="p-6 text-center text-muted-foreground text-sm border-t border-border/50 mt-12">
         <p>
-          © 2024 Gestione Scadenze ·{' '}
+          © 2024 Gestione Scadenze{' '}
           <a
             href="mailto:acdigital.app@gmail.com"
-            className="font-medium hover:text-primary transition-colors underline-offset-2 hover:underline"
+            className="text-xs font-medium hover:text-primary transition-colors underline-offset-2 hover:underline align-bottom"
             aria-label="Contatta AC Digital App via email"
           >
-            AC Digital App
+            by AC Digital App
           </a>
           . Tutti i diritti riservati.
         </p>
