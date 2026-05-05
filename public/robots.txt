@@ -3,11 +3,9 @@ Allow: /
 
 Disallow: /admin
 Disallow: /settings
+Disallow: /users
 Disallow: /transactions
-Disallow: /reminders
-Disallow: /plans
-Disallow: /archive
-Disallow: /import
-Disallow: /diagnostics
+Disallow: /checkout
+Disallow: /billing
 
-Sitemap: https://gestionescadenze.app/sitemap.xml
+Sitemap: https://www.gestionescadenze.app/sitemap.xml
