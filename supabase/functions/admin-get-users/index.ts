@@ -3,43 +3,55 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type, x-admin-token",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
-
-const BYPASS_TOKEN = "gs-admin-bypass-2026";
 
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
 
-  const bypassToken = req.headers.get("x-admin-token") ?? "";
-  const authHeader = req.headers.get("authorization") ?? "";
+  const supabaseUrl = Deno.env.get("SUPABASE_URL") ?? "";
+  const anonKey = Deno.env.get("SUPABASE_ANON_KEY") ?? "";
+  const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
 
-  if (bypassToken !== BYPASS_TOKEN && !authHeader.startsWith("Bearer ")) {
+  const authHeader = req.headers.get("authorization") ?? "";
+  if (!authHeader.startsWith("Bearer ")) {
     return new Response(JSON.stringify({ error: "Non autorizzato" }), {
-      status: 401,
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
+      status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }
 
-  const supabaseUrl = Deno.env.get("SUPABASE_URL") ?? "";
-  const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
+  const userClient = createClient(supabaseUrl, anonKey, {
+    global: { headers: { Authorization: authHeader } },
+  });
+  const token = authHeader.replace("Bearer ", "");
+  const { data: claimsData, error: claimsErr } = await userClient.auth.getClaims(token);
+  if (claimsErr || !claimsData?.claims?.sub) {
+    return new Response(JSON.stringify({ error: "Token non valido" }), {
+      status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+  const userId = claimsData.claims.sub as string;
 
   if (!serviceRoleKey) {
     return new Response(JSON.stringify({ error: "Service role key mancante" }), {
-      status: 500,
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
+      status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+
+  const adminClient = createClient(supabaseUrl, serviceRoleKey, {
+    auth: { autoRefreshToken: false, persistSession: false },
+  });
+
+  const { data: isAdmin, error: roleErr } = await adminClient.rpc("is_admin", { _user_id: userId });
+  if (roleErr || !isAdmin) {
+    return new Response(JSON.stringify({ error: "Accesso negato: ruolo admin richiesto" }), {
+      status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }
 
   try {
-    const adminClient = createClient(supabaseUrl, serviceRoleKey, {
-      auth: { autoRefreshToken: false, persistSession: false },
-    });
-
-    // Get all auth users via Admin REST API
     const usersResp = await fetch(`${supabaseUrl}/auth/v1/admin/users?per_page=1000`, {
       headers: {
         "Authorization": `Bearer ${serviceRoleKey}`,
@@ -50,41 +62,32 @@ serve(async (req) => {
     if (!usersResp.ok) {
       const errText = await usersResp.text();
       return new Response(JSON.stringify({ error: `auth error: ${usersResp.status} ${errText}` }), {
-        status: 500,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
     const authData = await usersResp.json();
     const authUsers: Array<{
-      id: string;
-      email?: string;
-      created_at?: string;
+      id: string; email?: string; created_at?: string;
       user_metadata?: Record<string, unknown>;
     }> = authData.users ?? [];
 
-    // Get base profile columns (always exist)
     const { data: profiles } = await adminClient
       .from("profiles")
       .select("id, full_name, avatar_url, notification_enabled, whatsapp_number, created_at, updated_at");
 
-    // Try to get subscription columns (may not exist in all deployments)
     let subProfiles: Array<Record<string, unknown>> = [];
     try {
       const { data } = await adminClient
         .from("profiles")
         .select("id, subscription_plan, subscription_status, stripe_customer_id, trial_end_date");
       subProfiles = (data ?? []) as Array<Record<string, unknown>>;
-    } catch {
-      // Columns don't exist yet — use empty defaults
-    }
+    } catch { /* ignore */ }
 
-    // Get user roles
     const { data: roles } = await adminClient
       .from("user_roles")
       .select("user_id, role");
 
-    // Build lookup maps
     const profilesMap: Record<string, Record<string, unknown>> = {};
     (profiles ?? []).forEach((p) => { profilesMap[p.id] = p as Record<string, unknown>; });
 
@@ -96,7 +99,6 @@ serve(async (req) => {
       rolesMap[r.user_id] = r.role;
     });
 
-    // Merge everything
     const users = authUsers.map((authUser) => {
       const profile = profilesMap[authUser.id] ?? {};
       const sub = subMap[authUser.id] ?? {};
@@ -123,14 +125,9 @@ serve(async (req) => {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (err: unknown) {
-    const message = err instanceof Error
-      ? err.message
-      : (typeof err === "object" && err !== null)
-        ? JSON.stringify(err)
-        : String(err);
+    const message = err instanceof Error ? err.message : String(err);
     return new Response(JSON.stringify({ error: message }), {
-      status: 500,
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
+      status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }
 });
