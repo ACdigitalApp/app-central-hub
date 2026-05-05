@@ -9,6 +9,7 @@ import { ProfilePhotoProvider } from "@/hooks/useProfilePhoto";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
+import ResetPassword from "./pages/ResetPassword";
 import Landing from "./pages/Landing";
 import Transactions from "./pages/Transactions";
 import Reminders from "./pages/Reminders";
@@ -40,6 +41,7 @@ const App = () => (
                 {/* Public routes */}
                 <Route path="/landing" element={<Landing />} />
                 <Route path="/auth" element={<Auth />} />
+                <Route path="/reset-password" element={<ResetPassword />} />
                 <Route path="/install" element={<Install />} />
                 
                 {/* Protected routes - require login or guest mode */}
