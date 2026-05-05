@@ -67,16 +67,18 @@ export default function Pricing() {
             <h1 className="text-3xl md:text-4xl font-bold text-primary mb-2">
               Scegli il tuo piano
             </h1>
-            <p className="text-muted-foreground text-lg mb-2">
-              Sblocca tutto il potenziale di Gestione Scadenze
-            </p>
-            <a
-              href="mailto:acdigital.app@gmail.com"
-              className="inline-block text-sm font-medium text-muted-foreground hover:text-primary transition-colors underline-offset-2 hover:underline mb-4"
-              aria-label="Contatta AC Digital App via email"
-            >
-              AC Digital App
-            </a>
+            <div className="flex items-end justify-center gap-2 mb-4">
+              <p className="text-muted-foreground text-lg leading-none">
+                Sblocca tutto il potenziale di Gestione Scadenze
+              </p>
+              <a
+                href="mailto:acdigital.app@gmail.com"
+                className="text-xs font-medium text-muted-foreground hover:text-primary transition-colors underline-offset-2 hover:underline leading-none pb-1"
+                aria-label="Contatta AC Digital App via email"
+              >
+                by AC Digital App
+              </a>
+            </div>
             <div className="inline-flex items-center gap-2 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 text-sm font-medium px-4 py-2 rounded-full border border-green-200 dark:border-green-800">
               <Star className="w-4 h-4" />
               14 giorni di prova gratuita, nessuna carta di credito
