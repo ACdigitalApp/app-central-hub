@@ -3,13 +3,79 @@ import { motion } from 'framer-motion';
 import { ArrowRight, Shield, Bell, TrendingUp, Smartphone, Download, CheckCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { PWAInstallButton } from '@/components/PWAInstallButton';
+import { SEO } from '@/components/SEO';
 import euroNote from '@/assets/100-euro-note.png';
 import euroCoin from '@/assets/2-euro-coin.png';
+
+const FAQS = [
+  { q: 'Cos\u2019\u00e8 Gestione Scadenze?', a: 'Gestione Scadenze \u00e8 un\u2019app per organizzare scadenze, pagamenti, bollette, rate, abbonamenti e promemoria personali.' },
+  { q: 'Posso usare Gestione Scadenze da smartphone?', a: 'S\u00ec. L\u2019app funziona da browser ed \u00e8 installabile come PWA su smartphone e desktop.' },
+  { q: 'Gestione Scadenze serve solo per le bollette?', a: 'No. Pu\u00f2 essere usata anche per rate, documenti, assicurazioni, abbonamenti, entrate, uscite e promemoria personali.' },
+  { q: '\u00c8 necessario scaricare l\u2019app da App Store?', a: 'No. Gestione Scadenze \u00e8 una web app installabile direttamente dal browser, senza passare dallo store.' },
+  { q: 'I dati sono protetti?', a: 'S\u00ec. L\u2019accesso avviene tramite account personale e i dati sono associati al profilo dell\u2019utente.' },
+  { q: 'Posso registrare entrate e uscite?', a: 'S\u00ec. L\u2019app permette di registrare transazioni, controllare il saldo e monitorare entrate e uscite.' },
+];
+
+const SITE_URL = 'https://gestionescadenze.app';
+const PAGE_URL = 'https://gestionescadenze.app/landing';
+
+const JSON_LD = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: 'AC Digital App',
+    url: SITE_URL,
+    email: 'acdigital.app@gmail.com',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'Gestione Scadenze',
+    url: SITE_URL,
+    inLanguage: 'it-IT',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareApplication',
+    name: 'Gestione Scadenze',
+    applicationCategory: 'FinanceApplication',
+    operatingSystem: 'Web, PWA, Desktop, Mobile',
+    inLanguage: 'it-IT',
+    url: SITE_URL,
+    brand: { '@type': 'Brand', name: 'AC Digital App' },
+    publisher: { '@type': 'Organization', name: 'AC Digital App' },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: FAQS.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: SITE_URL + '/' },
+      { '@type': 'ListItem', position: 2, name: 'Landing', item: PAGE_URL },
+    ],
+  },
+];
 
 export default function Landing() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/30">
+      <SEO
+        title="Gestione Scadenze | App per Scadenze, Pagamenti e Promemoria"
+        description="Gestione Scadenze \u00e8 l\u2019app per organizzare bollette, pagamenti, rate, abbonamenti, entrate, uscite e promemoria personali da desktop e smartphone."
+        canonical={PAGE_URL}
+        ogImage="https://gestionescadenze.app/pwa-512x512.png"
+        jsonLd={JSON_LD}
+      />
       {/* Header */}
       <header className="p-4 md:p-6 flex items-center justify-between max-w-7xl mx-auto">
         <div className="flex items-baseline gap-2">
@@ -199,6 +265,56 @@ export default function Landing() {
             </Button>
           </Link>
         </motion.div>
+
+        {/* SEO Content Section */}
+        <motion.section
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="mt-20 max-w-4xl mx-auto"
+          aria-labelledby="seo-heading"
+        >
+          <h2 id="seo-heading" className="text-2xl md:text-3xl font-bold text-foreground mb-6 text-center">
+            Gestione Scadenze: l’app per ricordare pagamenti, bollette e impegni
+          </h2>
+          <p className="text-muted-foreground text-base md:text-lg leading-relaxed mb-6">
+            Gestione Scadenze è un’app pensata per aiutarti a tenere sotto controllo scadenze, pagamenti, bollette,
+            abbonamenti, rate, documenti e promemoria personali. Puoi registrare entrate e uscite, visualizzare il saldo,
+            ricevere promemoria e organizzare le tue scadenze in modo semplice da desktop e smartphone.
+          </p>
+          <Card className="border-primary/30 bg-primary/5">
+            <CardContent className="p-6">
+              <h3 className="font-semibold text-primary mb-2">Risposta rapida</h3>
+              <p className="text-foreground/90">
+                Gestione Scadenze è una web app installabile che consente di gestire scadenze, promemoria, entrate,
+                uscite e pagamenti ricorrenti da un’unica dashboard semplice e sicura.
+              </p>
+            </CardContent>
+          </Card>
+        </motion.section>
+
+        {/* FAQ Section */}
+        <motion.section
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="mt-16 max-w-3xl mx-auto"
+          aria-labelledby="faq-heading"
+        >
+          <h2 id="faq-heading" className="text-2xl md:text-3xl font-bold text-foreground mb-6 text-center">
+            Domande frequenti
+          </h2>
+          <Accordion type="single" collapsible className="w-full">
+            {FAQS.map((faq, i) => (
+              <AccordionItem key={i} value={`faq-${i}`}>
+                <AccordionTrigger className="text-left">{faq.q}</AccordionTrigger>
+                <AccordionContent className="text-muted-foreground">{faq.a}</AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
+        </motion.section>
       </main>
 
       {/* Footer */}
