@@ -12,16 +12,16 @@ export default function Landing() {
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/30">
       {/* Header */}
       <header className="p-4 md:p-6 flex items-center justify-between max-w-7xl mx-auto">
-        <div className="flex items-end gap-2">
-          <div className="coin-container">
+        <div className="flex items-baseline gap-2">
+          <div className="coin-container self-center">
             <div className="banknote-shine coin-rotate w-10 h-10 rounded-full">
               <img src={euroCoin} alt="Euro" className="w-10 h-10 object-contain" />
             </div>
           </div>
-          <span className="font-bold text-xl text-foreground leading-none">Gestione Scadenze</span>
+          <span className="font-bold text-xl text-foreground">Gestione Scadenze</span>
           <a
             href="mailto:acdigital.app@gmail.com"
-            className="text-xs font-medium text-muted-foreground hover:text-primary transition-colors underline-offset-2 hover:underline leading-none pb-1"
+            className="text-xs font-medium text-muted-foreground hover:text-primary transition-colors underline-offset-2 hover:underline"
             aria-label="Contatta AC Digital App via email"
           >
             by AC Digital App

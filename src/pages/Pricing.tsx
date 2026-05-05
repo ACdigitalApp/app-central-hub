@@ -67,13 +67,13 @@ export default function Pricing() {
             <h1 className="text-3xl md:text-4xl font-bold text-primary mb-2">
               Scegli il tuo piano
             </h1>
-            <div className="flex items-end justify-center gap-2 mb-4">
-              <p className="text-muted-foreground text-lg leading-none">
+            <div className="flex items-baseline justify-center gap-2 mb-4">
+              <p className="text-muted-foreground text-lg">
                 Sblocca tutto il potenziale di Gestione Scadenze
               </p>
               <a
                 href="mailto:acdigital.app@gmail.com"
-                className="text-xs font-medium text-muted-foreground hover:text-primary transition-colors underline-offset-2 hover:underline leading-none pb-1"
+                className="text-xs font-medium text-muted-foreground hover:text-primary transition-colors underline-offset-2 hover:underline"
                 aria-label="Contatta AC Digital App via email"
               >
                 by AC Digital App
