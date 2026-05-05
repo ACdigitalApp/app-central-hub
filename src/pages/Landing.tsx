@@ -265,6 +265,56 @@ export default function Landing() {
             </Button>
           </Link>
         </motion.div>
+
+        {/* SEO Content Section */}
+        <motion.section
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="mt-20 max-w-4xl mx-auto"
+          aria-labelledby="seo-heading"
+        >
+          <h2 id="seo-heading" className="text-2xl md:text-3xl font-bold text-foreground mb-6 text-center">
+            Gestione Scadenze: l’app per ricordare pagamenti, bollette e impegni
+          </h2>
+          <p className="text-muted-foreground text-base md:text-lg leading-relaxed mb-6">
+            Gestione Scadenze è un’app pensata per aiutarti a tenere sotto controllo scadenze, pagamenti, bollette,
+            abbonamenti, rate, documenti e promemoria personali. Puoi registrare entrate e uscite, visualizzare il saldo,
+            ricevere promemoria e organizzare le tue scadenze in modo semplice da desktop e smartphone.
+          </p>
+          <Card className="border-primary/30 bg-primary/5">
+            <CardContent className="p-6">
+              <h3 className="font-semibold text-primary mb-2">Risposta rapida</h3>
+              <p className="text-foreground/90">
+                Gestione Scadenze è una web app installabile che consente di gestire scadenze, promemoria, entrate,
+                uscite e pagamenti ricorrenti da un’unica dashboard semplice e sicura.
+              </p>
+            </CardContent>
+          </Card>
+        </motion.section>
+
+        {/* FAQ Section */}
+        <motion.section
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="mt-16 max-w-3xl mx-auto"
+          aria-labelledby="faq-heading"
+        >
+          <h2 id="faq-heading" className="text-2xl md:text-3xl font-bold text-foreground mb-6 text-center">
+            Domande frequenti
+          </h2>
+          <Accordion type="single" collapsible className="w-full">
+            {FAQS.map((faq, i) => (
+              <AccordionItem key={i} value={`faq-${i}`}>
+                <AccordionTrigger className="text-left">{faq.q}</AccordionTrigger>
+                <AccordionContent className="text-muted-foreground">{faq.a}</AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
+        </motion.section>
       </main>
 
       {/* Footer */}
