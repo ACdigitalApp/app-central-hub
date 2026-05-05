@@ -9,9 +9,73 @@ import { SEO } from '@/components/SEO';
 import euroNote from '@/assets/100-euro-note.png';
 import euroCoin from '@/assets/2-euro-coin.png';
 
+const FAQS = [
+  { q: 'Cos\u2019\u00e8 Gestione Scadenze?', a: 'Gestione Scadenze \u00e8 un\u2019app per organizzare scadenze, pagamenti, bollette, rate, abbonamenti e promemoria personali.' },
+  { q: 'Posso usare Gestione Scadenze da smartphone?', a: 'S\u00ec. L\u2019app funziona da browser ed \u00e8 installabile come PWA su smartphone e desktop.' },
+  { q: 'Gestione Scadenze serve solo per le bollette?', a: 'No. Pu\u00f2 essere usata anche per rate, documenti, assicurazioni, abbonamenti, entrate, uscite e promemoria personali.' },
+  { q: '\u00c8 necessario scaricare l\u2019app da App Store?', a: 'No. Gestione Scadenze \u00e8 una web app installabile direttamente dal browser, senza passare dallo store.' },
+  { q: 'I dati sono protetti?', a: 'S\u00ec. L\u2019accesso avviene tramite account personale e i dati sono associati al profilo dell\u2019utente.' },
+  { q: 'Posso registrare entrate e uscite?', a: 'S\u00ec. L\u2019app permette di registrare transazioni, controllare il saldo e monitorare entrate e uscite.' },
+];
+
+const SITE_URL = 'https://gestionescadenze.app';
+const PAGE_URL = 'https://gestionescadenze.app/landing';
+
+const JSON_LD = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: 'AC Digital App',
+    url: SITE_URL,
+    email: 'acdigital.app@gmail.com',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'Gestione Scadenze',
+    url: SITE_URL,
+    inLanguage: 'it-IT',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareApplication',
+    name: 'Gestione Scadenze',
+    applicationCategory: 'FinanceApplication',
+    operatingSystem: 'Web, PWA, Desktop, Mobile',
+    inLanguage: 'it-IT',
+    url: SITE_URL,
+    brand: { '@type': 'Brand', name: 'AC Digital App' },
+    publisher: { '@type': 'Organization', name: 'AC Digital App' },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: FAQS.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: SITE_URL + '/' },
+      { '@type': 'ListItem', position: 2, name: 'Landing', item: PAGE_URL },
+    ],
+  },
+];
+
 export default function Landing() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/30">
+      <SEO
+        title="Gestione Scadenze | App per Scadenze, Pagamenti e Promemoria"
+        description="Gestione Scadenze \u00e8 l\u2019app per organizzare bollette, pagamenti, rate, abbonamenti, entrate, uscite e promemoria personali da desktop e smartphone."
+        canonical={PAGE_URL}
+        ogImage="https://gestionescadenze.app/pwa-512x512.png"
+        jsonLd={JSON_LD}
+      />
       {/* Header */}
       <header className="p-4 md:p-6 flex items-center justify-between max-w-7xl mx-auto">
         <div className="flex items-baseline gap-2">
