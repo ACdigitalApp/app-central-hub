@@ -108,6 +108,13 @@ export default function Dashboard() {
               <h1 className="text-2xl md:text-3xl font-bold text-[#067d1c]">
                 Gestione Scadenze
               </h1>
+              <a
+                href="mailto:acdigital.app@gmail.com"
+                className="text-sm md:text-base font-medium text-muted-foreground hover:text-primary transition-colors underline-offset-2 hover:underline"
+                aria-label="Contatta AC Digital App via email"
+              >
+                AC Digital App
+              </a>
             </div>
             
             <div className="flex items-center gap-3">

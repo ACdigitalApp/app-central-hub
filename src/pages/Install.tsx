@@ -115,6 +115,13 @@ export default function Install() {
           <h1 className="text-2xl md:text-3xl font-bold text-primary mb-2">
             Installa Gestione Scadenze
           </h1>
+          <a
+            href="mailto:acdigital.app@gmail.com"
+            className="inline-block text-sm font-medium text-muted-foreground hover:text-primary transition-colors underline-offset-2 hover:underline mb-2"
+            aria-label="Contatta AC Digital App via email"
+          >
+            AC Digital App
+          </a>
           <p className="text-muted-foreground">
             Installa l'app sul tuo dispositivo per un accesso rapido
           </p>

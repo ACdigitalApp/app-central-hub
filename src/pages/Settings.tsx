@@ -739,7 +739,16 @@ export default function Settings() {
                       <img src={euroCoin} alt="Logo" className="w-8 h-8" />
                     </div>
                     <div>
-                      <p className="font-medium">Gestione Scadenze</p>
+                      <p className="font-medium">
+                        Gestione Scadenze ·{' '}
+                        <a
+                          href="mailto:acdigital.app@gmail.com"
+                          className="text-muted-foreground hover:text-primary transition-colors underline-offset-2 hover:underline"
+                          aria-label="Contatta AC Digital App via email"
+                        >
+                          AC Digital App
+                        </a>
+                      </p>
                       <p className="text-sm text-muted-foreground">
                         {isIOS ? 'Aggiungi alla schermata Home' : 'Installa come app'}
                       </p>

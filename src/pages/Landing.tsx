@@ -19,6 +19,13 @@ export default function Landing() {
             </div>
           </div>
           <span className="font-bold text-xl text-foreground">Gestione Scadenze</span>
+          <a
+            href="mailto:acdigital.app@gmail.com"
+            className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors underline-offset-2 hover:underline"
+            aria-label="Contatta AC Digital App via email"
+          >
+            AC Digital App
+          </a>
         </div>
         <div className="flex items-center gap-3">
           <Link to="/auth">
@@ -196,7 +203,17 @@ export default function Landing() {
 
       {/* Footer */}
       <footer className="p-6 text-center text-muted-foreground text-sm border-t border-border/50 mt-12">
-        <p>© 2024 Gestione Scadenze. Tutti i diritti riservati.</p>
+        <p>
+          © 2024 Gestione Scadenze ·{' '}
+          <a
+            href="mailto:acdigital.app@gmail.com"
+            className="font-medium hover:text-primary transition-colors underline-offset-2 hover:underline"
+            aria-label="Contatta AC Digital App via email"
+          >
+            AC Digital App
+          </a>
+          . Tutti i diritti riservati.
+        </p>
         <p className="mt-2">
           PWA disponibile su iOS, Android, Windows e Mac
         </p>
