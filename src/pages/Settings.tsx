@@ -740,13 +740,13 @@ export default function Settings() {
                     </div>
                     <div>
                       <p className="font-medium">
-                        Gestione Scadenze ·{' '}
+                        Gestione Scadenze{' '}
                         <a
                           href="mailto:acdigital.app@gmail.com"
-                          className="text-muted-foreground hover:text-primary transition-colors underline-offset-2 hover:underline"
+                          className="text-xs font-normal text-muted-foreground hover:text-primary transition-colors underline-offset-2 hover:underline align-bottom"
                           aria-label="Contatta AC Digital App via email"
                         >
-                          AC Digital App
+                          by AC Digital App
                         </a>
                       </p>
                       <p className="text-sm text-muted-foreground">

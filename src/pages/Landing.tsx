@@ -12,19 +12,19 @@ export default function Landing() {
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/30">
       {/* Header */}
       <header className="p-4 md:p-6 flex items-center justify-between max-w-7xl mx-auto">
-        <div className="flex items-center gap-2">
+        <div className="flex items-end gap-2">
           <div className="coin-container">
             <div className="banknote-shine coin-rotate w-10 h-10 rounded-full">
               <img src={euroCoin} alt="Euro" className="w-10 h-10 object-contain" />
             </div>
           </div>
-          <span className="font-bold text-xl text-foreground">Gestione Scadenze</span>
+          <span className="font-bold text-xl text-foreground leading-none">Gestione Scadenze</span>
           <a
             href="mailto:acdigital.app@gmail.com"
-            className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors underline-offset-2 hover:underline"
+            className="text-xs font-medium text-muted-foreground hover:text-primary transition-colors underline-offset-2 hover:underline leading-none pb-1"
             aria-label="Contatta AC Digital App via email"
           >
-            AC Digital App
+            by AC Digital App
           </a>
         </div>
         <div className="flex items-center gap-3">
@@ -204,13 +204,13 @@ export default function Landing() {
       {/* Footer */}
       <footer className="p-6 text-center text-muted-foreground text-sm border-t border-border/50 mt-12">
         <p>
-          © 2024 Gestione Scadenze ·{' '}
+          © 2024 Gestione Scadenze{' '}
           <a
             href="mailto:acdigital.app@gmail.com"
-            className="font-medium hover:text-primary transition-colors underline-offset-2 hover:underline"
+            className="text-xs font-medium hover:text-primary transition-colors underline-offset-2 hover:underline align-bottom"
             aria-label="Contatta AC Digital App via email"
           >
-            AC Digital App
+            by AC Digital App
           </a>
           . Tutti i diritti riservati.
         </p>
