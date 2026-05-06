@@ -555,7 +555,7 @@ export default function AdminUsers() {
             </div>
           </motion.div>
           <div className="flex gap-2">
-            <Button variant="outline" size="sm" onClick={fetchUsers} className="gap-2 text-primary border-primary/30 hover:bg-primary/10">
+            <Button variant="outline" size="sm" onClick={() => { fetchUsers(); fetchVisitCount(); }} className="gap-2 text-primary border-primary/30 hover:bg-primary/10">
               <RefreshCw className="w-4 h-4" /> Aggiorna
             </Button>
             <Button size="sm" onClick={() => setShowNewUser(true)} className="gap-2 bg-primary hover:bg-primary/90">
