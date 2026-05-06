@@ -492,6 +492,10 @@ export default function AdminUsers() {
       toast.error('Email e password sono obbligatori');
       return;
     }
+    if (newUserForm.password.length < 6) {
+      toast.error('La password deve avere almeno 6 caratteri');
+      return;
+    }
     try {
       setCreatingUser(true);
       const { data, error } = await supabase.auth.admin.createUser({
@@ -966,7 +970,8 @@ export default function AdminUsers() {
                 <Label className="text-sm">Password *</Label>
                 <Input
                   type="password"
-                  placeholder="Min. 8 caratteri"
+                  placeholder="Min. 6 caratteri"
+                  minLength={6}
                   value={newUserForm.password}
                   onChange={e => setNewUserForm({ ...newUserForm, password: e.target.value })}
                   className="mt-1"
