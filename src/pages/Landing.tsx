@@ -1,5 +1,7 @@
+import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { supabase } from '@/integrations/supabase/client';
 import { ArrowRight, Shield, Bell, TrendingUp, Smartphone, Download, CheckCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -66,7 +68,25 @@ const JSON_LD = [
   },
 ];
 
+const VISIT_KEY = 'gestione_scadenze_visit_counted_at';
+const APP_KEY = 'gestione-scadenze';
+
 export default function Landing() {
+  useEffect(() => {
+    try {
+      const last = localStorage.getItem(VISIT_KEY);
+      const now = Date.now();
+      if (!last || now - parseInt(last, 10) > 24 * 60 * 60 * 1000) {
+        (supabase.rpc as any)('increment_app_visit', { p_app_key: APP_KEY })
+          .then(({ error }: { error: unknown }) => {
+            if (!error) localStorage.setItem(VISIT_KEY, String(now));
+          });
+      }
+    } catch {
+      // ignore
+    }
+  }, []);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/30">
       <SEO

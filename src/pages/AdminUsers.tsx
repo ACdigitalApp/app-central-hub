@@ -4,7 +4,7 @@ import {
   Users, Shield, ShieldCheck, Phone, Save, Loader2, RefreshCw,
   Search, Trash2, TrendingUp, Bell, BellOff, UserPlus,
   Crown, Ban, CheckCircle2, CreditCard, Calendar, Euro,
-  AlertTriangle, UserCheck,
+  AlertTriangle, UserCheck, Eye,
 } from 'lucide-react';
 import { MainLayout } from '@/components/layout/MainLayout';
 import { Button } from '@/components/ui/button';
@@ -259,6 +259,16 @@ export default function AdminUsers() {
     subscription_plan: 'free',
   });
   const [creatingUser, setCreatingUser] = useState(false);
+  const [visitCount, setVisitCount] = useState<number>(0);
+
+  const fetchVisitCount = useCallback(async () => {
+    try {
+      const { data, error } = await (supabase.rpc as any)('get_app_visit_count', { p_app_key: 'gestione-scadenze' });
+      if (!error) setVisitCount(Number(data) || 0);
+    } catch {
+      // ignore
+    }
+  }, []);
 
   // ── Auth guard ──────────────────────────────────────────────────────────────
 
@@ -359,8 +369,8 @@ export default function AdminUsers() {
   }, []);
 
   useEffect(() => {
-    if (isAdmin) { fetchUsers(); fetchCrossAppRevenue(); }
-  }, [isAdmin, fetchUsers, fetchCrossAppRevenue]);
+    if (isAdmin) { fetchUsers(); fetchCrossAppRevenue(); fetchVisitCount(); }
+  }, [isAdmin, fetchUsers, fetchCrossAppRevenue, fetchVisitCount]);
 
   // ── Stats ───────────────────────────────────────────────────────────────────
 
@@ -562,6 +572,7 @@ export default function AdminUsers() {
           <StatCard icon={Euro} label="Ultimi 30gg" value={`€${stats.ultimi30gg.toFixed(2)}`} color="text-purple-600" />
           <StatCard icon={Calendar} label="Trial Attive" value={stats.trialAttive} color="text-cyan-600" />
           <StatCard icon={AlertTriangle} label="Scaduti" value={stats.scaduti} color="text-red-500" />
+          <StatCard icon={Eye} label="Visite alla Home" value={visitCount.toLocaleString('it-IT')} color="text-indigo-600" />
         </div>
 
         {/* Incassi Tutte le App */}
