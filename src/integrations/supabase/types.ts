@@ -223,6 +223,27 @@ export type Database = {
         }
         Relationships: []
       }
+      app_visit_counters: {
+        Row: {
+          app_key: string
+          count: number
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          app_key: string
+          count?: number
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          app_key?: string
+          count?: number
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       attachments: {
         Row: {
           created_at: string
@@ -644,6 +665,7 @@ export type Database = {
           whatsapp_number: string
         }[]
       }
+      get_app_visit_count: { Args: { p_app_key: string }; Returns: number }
       get_guest_mode: { Args: never; Returns: boolean }
       has_role: {
         Args: {
@@ -652,6 +674,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      increment_app_visit: { Args: { p_app_key: string }; Returns: number }
       is_admin: { Args: { _user_id: string }; Returns: boolean }
       update_user_role: {
         Args: {
