@@ -564,6 +564,21 @@ export default function AdminUsers() {
           </div>
         </div>
 
+        {/* Visite Totali - clone DJ's Engine */}
+        <div className="bg-white border border-border rounded-xl px-5 py-4 flex items-center justify-between shadow-sm">
+          <h3 className="text-base font-semibold text-primary">Visite Totali</h3>
+          <div className="flex gap-1.5">
+            {String(visitCount).padStart(5, '0').split('').map((d, i) => (
+              <div
+                key={i}
+                className="w-9 h-10 rounded-md bg-primary/5 border border-primary/20 flex items-center justify-center text-lg font-bold text-primary"
+              >
+                {d}
+              </div>
+            ))}
+          </div>
+        </div>
+
         {/* Stats */}
         <div className="grid grid-cols-3 md:grid-cols-6 gap-3">
           <StatCard icon={Euro} label="Incasso Totale" value={`€${stats.incassoTotale.toFixed(2)}`} color="text-green-600" />
@@ -572,7 +587,6 @@ export default function AdminUsers() {
           <StatCard icon={Euro} label="Ultimi 30gg" value={`€${stats.ultimi30gg.toFixed(2)}`} color="text-purple-600" />
           <StatCard icon={Calendar} label="Trial Attive" value={stats.trialAttive} color="text-cyan-600" />
           <StatCard icon={AlertTriangle} label="Scaduti" value={stats.scaduti} color="text-red-500" />
-          <StatCard icon={Eye} label="Visite Totali" value={String(visitCount).padStart(5, '0')} color="text-indigo-600" />
         </div>
 
         {/* Incassi Tutte le App */}
