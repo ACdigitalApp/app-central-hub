@@ -572,7 +572,7 @@ export default function AdminUsers() {
           <StatCard icon={Euro} label="Ultimi 30gg" value={`€${stats.ultimi30gg.toFixed(2)}`} color="text-purple-600" />
           <StatCard icon={Calendar} label="Trial Attive" value={stats.trialAttive} color="text-cyan-600" />
           <StatCard icon={AlertTriangle} label="Scaduti" value={stats.scaduti} color="text-red-500" />
-          <StatCard icon={Eye} label="Visite alla Home" value={visitCount.toLocaleString('it-IT')} color="text-indigo-600" />
+          <StatCard icon={Eye} label="Visite Totali" value={String(visitCount).padStart(5, '0')} color="text-indigo-600" />
         </div>
 
         {/* Incassi Tutte le App */}
