@@ -492,6 +492,10 @@ export default function AdminUsers() {
       toast.error('Email e password sono obbligatori');
       return;
     }
+    if (newUserForm.password.length < 6) {
+      toast.error('La password deve avere almeno 6 caratteri');
+      return;
+    }
     try {
       setCreatingUser(true);
       const { data, error } = await supabase.auth.admin.createUser({
