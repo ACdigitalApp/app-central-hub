@@ -966,7 +966,8 @@ export default function AdminUsers() {
                 <Label className="text-sm">Password *</Label>
                 <Input
                   type="password"
-                  placeholder="Min. 8 caratteri"
+                  placeholder="Min. 6 caratteri"
+                  minLength={6}
                   value={newUserForm.password}
                   onChange={e => setNewUserForm({ ...newUserForm, password: e.target.value })}
                   className="mt-1"
